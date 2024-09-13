@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Allergies and Upload Image</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body style = "background-color:#FFFFE4;">
+    <!-- Existing form for allergies -->
+    <div id="nav" class="flex flex-row align-start gap-10 h-12 items-center justify-between px-4 mb-6 shadow-md" style="background-color: #8A9A5B;">
+
+        <a href="/"><p class="text-neutral-100" style="color: #FAF9F6;">Home</p></a>
+
+        <a href="https://github.com/fostej26/AllergyPal" target="_blank">
+            <img src="/assets/pngegg.png" class = "w-6 h-6"> 
+        </a>
+
+    </div>
+
+    <div id="hero" class="flex flex-col h-1/3 gap-8 mt-20">
+        <div id="title" class="text-6xl font-bold font-serif w-9/12 mx-8" style = "color:#8A9A5B ;">
+            <h1>Welcome to AllergyPal</h1>
+        </div>
+        <div id="subtitle" class="w-9/12 p-12" style = "background-color:#8A9A5B ;">
+            <h1 class = "text-lg font-serif" style="color: #FAF9F6;">
+                A digital aid designed to allow you to enjoy new foods without
+                worrying about allergies or dietary restrictions.
+            </h1>
+        </div>
+    </div>
+
+    <div id = "get-started" class = "flex flex-row mt-36 align-center items-center">
+        <div class="w-5/12">
+            <hr style="border: #8A9A5B solid 1px;" />
+        </div>
+
+        <div class = "w-2/12 text-center text-2xl font-medium" style="color: #8A9A5B;">
+            <h2>Get Started</h2>
+        </div>
+
+        <div class="w-5/12">
+            <hr style="border: #8A9A5B solid 1px;" />
+        </div>
+
+    </div>
+
+    <div id="submit-allergies" class="flex flex-col justify-center items-center h-1/4 mt-24 p-8" style = "background-color:#8A9A5B ;">
+        <form action="/saveAllergies" method="POST" class="text-xl">
+            <div class="flex justify-center items-center">
+                <label for="allergies" class = "text-center font-serif" style="color: #FAF9F6;">Please input any allergies, sensitivities, or dietary restrictions:</label>
+            </div>
+            <div class="flex justify-center items-center m-4">
+                <input type="text" id="allergies" name="allergies">
+            </div>
+            <div class="flex justify-center items-center">
+                <button type="submit" class = "border p-2 rounded-md text-sm" style="background-color: #FAF9F6;">Submit</button>
+            </div>
+        </form>
+    </div>
+
+  
+
+    <!-- Webcam capture section -->
+    <div class="flex mt-24 flex-col items-center">
+        <h2 class="mb-4 text-xl">Capture a photo of your food:</h2>
+        <video id="video" width="640" height="480" autoplay class="mb-4"></video>
+        <button id="capture" class="mb-4 px-4 py-2 text-white rounded" style = "background-color:#8A9A5B ;">Capture</button>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <img id="capturedImage" style="display:none; max-width: 100%; height: auto;" />
+    
+        <script>
+            // Access the webcam
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const captureButton = document.getElementById('capture');
+            const capturedImage = document.getElementById('capturedImage');
+    
+            let stream;
+    
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(mediaStream => {
+                    stream = mediaStream;
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error("Error accessing the webcam: ", err);
+                });
+    
+            // Capture the image from the webcam
+            captureButton.addEventListener('click', () => {
+                const context = canvas.getContext('2d');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+                // Stop the video stream to freeze the canvas
+                stream.getTracks().forEach(track => track.stop());
+    
+                // Convert the canvas image to a data URL and display it
+                const dataURL = canvas.toDataURL('image/png');
+                capturedImage.src = dataURL;
+                capturedImage.style.display = 'block';
+    
+                // Optionally hide the video element and capture button
+                video.style.display = 'none';
+                captureButton.style.display = 'none';
+    
+                // Convert the canvas image to a blob and append it to the form
+                canvas.toBlob(blob => {
+                    const fileInput = document.getElementById('image');
+                    const file = new File([blob], 'webcam-image.png', { type: 'image/png' });
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+    
+                    // Submit the form if needed
+                    // uploadForm.submit(); // Uncomment this line if you want to submit the form immediately
+                }, 'image/png');
+            });
+        </script>
+    </div>
+    
+
+      <!-- New form for image upload -->
+    <div id = "upload" class ="my-12">
+        <form id="uploadForm" action="/detectHazards" method="POST" enctype="multipart/form-data" class = "flex flex-row justify-center items-center">
+            <input type="file" id="image" name="image">
+            <button type="submit" class="px-4 py-2 text-white rounded text-sm" style = "background-color:#8A9A5B ;">Upload</button>
+        </form>
+    </div>
+
+    <div class="flex flex-col align-center items-center h-48 items-center justify-around px-4 shadow-md w-full" style="background-color: #8A9A5B;">
+        <div class="w-full items-center">
+            <hr style="border: #FAF9F6 solid 1px;" />
+        </div>
+        <div class="w-full mb-6">
+            <p class = "text-lg text-center" style="color: #FAF9F6;">
+                Created using Python, Tensorflow, Flask, HTML, Tailwind CSS, and
+                Javascript for McMaster GDSC Hackathon 2024.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Allergies and Upload Image</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body style = "background-color:#FFFFE4;">
+    <!-- Existing form for allergies -->
+    <div id="nav" class="flex flex-row align-start gap-10 h-12 items-center justify-between px-4 mb-6 shadow-md" style="background-color: #8A9A5B;">
+
+        <a href="/"><p class="text-neutral-100" style="color: #FAF9F6;">Home</p></a>
+
+        <a href="https://github.com/fostej26/AllergyPal" target="_blank">
+            <img src="/assets/pngegg.png" class = "w-6 h-6"> 
+        </a>
+
+    </div>
+
+    <div class = "flex flex-col justify-center items-center align-center">
+        <p class = "text-xl text-center">
+            {{ hazard_content | safe }}
+        </p>
+
+        <div class="flex justify-center items-center mt-20">
+            <a href = "/">
+                <button id="capture" class="mb-4 px-4 py-2 text-white rounded" style = "background-color:#8A9A5B ;">Home</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="flex flex-col align-center items-center h-48 items-center justify-around px-4 shadow-md w-full fixed bottom-0" style="background-color: #8A9A5B;">
+        <div class="w-full items-center">
+            <hr style="border: #FAF9F6 solid 1px;" />
+        </div>
+        <div class="w-full mb-6">
+            <p class = "text-lg text-center" style="color: #FAF9F6;">
+                Created using Python, Tensorflow, Flask, HTML, Tailwind CSS, and
+                Javascript for McMaster GDSC Hackathon 2024.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
