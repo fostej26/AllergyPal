@@ -8,10 +8,11 @@ common ingredients in that food and cross references is it to the user's list of
 that notifies them of any risk.
 
 ### Prerequisites:
-Install all packages using pip:
+1. Install all packages using pip:
    - Flask
-   - OpenAI
+   - OpenAI (pip install openai==0.28)
    - Tensorflow
    - Numpy
    - Pillow
+2. Obtain an OpenAI project API key and insert in app.py
   
